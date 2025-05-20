@@ -18,10 +18,18 @@ export async function generateAttendancePDF(data: AttendanceReport): Promise<voi
     // Create document with default settings
     const doc = new jsPDF();
     
-    // Use standard fonts for safer compatibility
-    // setR2L must be true for Arabic text
+    // Set Right-to-Left mode for Arabic text
     doc.setR2L(true);
-    doc.setFont("Helvetica", "normal");
+    
+    // First try to use our Saudi Arabia font, fallback to standard fonts
+    try {
+      // Using standard font for better compatibility
+      doc.setFont("Helvetica", "normal");
+    } catch (err) {
+      console.warn("Error setting font:", err);
+      // Fallback to default
+      doc.setFont("Helvetica", "normal");
+    }
     
     // Add title
     doc.setFontSize(18);

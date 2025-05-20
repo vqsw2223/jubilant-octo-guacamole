@@ -1,6 +1,7 @@
 import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./index.css";
+import "./assets/fonts.css";
 
 // Load jsPDF scripts
 const loadJsPDF = document.createElement('script');
