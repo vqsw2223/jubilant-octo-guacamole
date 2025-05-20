@@ -41,8 +41,8 @@
   --sidebar-border: 20 5.9% 90%;
   --sidebar-ring: 20 14.3% 4.1%;
   
-  /* Add Saudi font as primary font */
-  font-family: 'HacenSaudiArabia', 'Amiri', serif;
+  /* Use Cairo as primary font - formal Arabic font */
+  font-family: 'Cairo', 'HacenSaudiArabia', 'Amiri', serif;
 }
 
 .dark {
@@ -75,7 +75,7 @@
 
   body {
     @apply antialiased bg-background text-foreground;
-    font-family: 'HacenSaudiArabia', 'Amiri', serif;
+    font-family: 'Cairo', 'HacenSaudiArabia', 'Amiri', serif;
   }
 }
 
