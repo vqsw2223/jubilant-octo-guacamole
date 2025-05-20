@@ -4,36 +4,59 @@ import { AttendanceReport } from "@shared/schema";
  * Generate PDF for attendance report
  */
 export async function generateAttendancePDF(data: AttendanceReport): Promise<void> {
-  // Make sure jsPDF is loaded
-  if (!window.jspdf) {
-    console.error("jsPDF library not loaded");
-    return;
+  try {
+    // Make sure jsPDF is loaded
+    await ensurePdfLibraryLoaded();
+    
+    if (!window.jspdf) {
+      console.error("jsPDF library not loaded");
+      return;
+    }
+    
+    const { jsPDF } = window.jspdf;
+    
+    // Create document with default settings
+    const doc = new jsPDF();
+    
+    // Use standard fonts for safer compatibility
+    // setR2L must be true for Arabic text
+    doc.setR2L(true);
+    doc.setFont("Helvetica", "normal");
+    
+    // Add title
+    doc.setFontSize(18);
+    doc.text("تقرير الغياب - مدرسة جابر بن حيان", 105, 20, { align: "center" });
+    
+    // Add content - using separate lines to reduce potential issues
+    doc.setFontSize(12);
+    
+    // Draw report data - using position from right for proper RTL alignment
+    doc.text("عدد الطلاب:", 170, 40, { align: "right" });
+    doc.text(data.totalStudents.toString(), 140, 40, { align: "right" });
+    
+    doc.text("عدد الطلاب الحاضرين:", 170, 50, { align: "right" });
+    doc.text(data.presentCount.toString(), 140, 50, { align: "right" });
+    
+    doc.text("عدد المتغيبين:", 170, 60, { align: "right" });
+    doc.text(data.absentCount.toString(), 140, 60, { align: "right" });
+    
+    doc.text("عدد المتأخرين:", 170, 70, { align: "right" });
+    doc.text(data.lateCount.toString(), 140, 70, { align: "right" });
+    
+    // Add date
+    const today = new Date();
+    doc.text("تاريخ التقرير:", 170, 90, { align: "right" });
+    doc.text(today.toLocaleDateString("ar-SA"), 140, 90, { align: "right" });
+    
+    // Add footer
+    doc.setFontSize(10);
+    doc.text("© 2025 سامي بن عازم الرويلي – جميع الحقوق محفوظة", 105, 270, { align: "center" });
+    
+    // Save PDF
+    doc.save("تقرير_الغياب.pdf");
+  } catch (error) {
+    console.error("Error generating PDF:", error);
   }
-  
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-  
-  // Set RTL and Arabic font support
-  doc.setR2L(true);
-  doc.setFont("Amiri");
-  
-  // Add title
-  doc.setFontSize(20);
-  doc.text("تقرير الغياب – مدرسة جابر بن حيان", 105, 20, { align: "center" });
-  
-  // Add content
-  doc.setFontSize(14);
-  doc.text(`عدد الطلاب: ${data.totalStudents}`, 170, 40, { align: "right" });
-  doc.text(`عدد الطلاب الحاضرين: ${data.presentCount}`, 170, 50, { align: "right" });
-  doc.text(`عدد المتغيبين: ${data.absentCount}`, 170, 60, { align: "right" });
-  doc.text(`عدد المتأخرين: ${data.lateCount}`, 170, 70, { align: "right" });
-  
-  // Add date
-  const today = new Date();
-  doc.text(`تاريخ التقرير: ${today.toLocaleDateString("ar-SA")}`, 170, 90, { align: "right" });
-  
-  // Save PDF
-  doc.save("تقرير_الغياب.pdf");
 }
 
 /**
@@ -45,11 +68,40 @@ export function ensurePdfLibraryLoaded(): Promise<void> {
   }
   
   return new Promise((resolve, reject) => {
-    const script = document.createElement('script');
-    script.src = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
-    script.onload = () => resolve();
-    script.onerror = () => reject(new Error("Failed to load jsPDF library"));
-    document.head.appendChild(script);
+    // Load core jsPDF
+    const jsPdfScript = document.createElement('script');
+    jsPdfScript.src = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
+    
+    jsPdfScript.onload = () => {
+      // After jsPDF loads, load Arabic fonts plugin if needed
+      if (!window.jspdf) {
+        reject(new Error("jsPDF failed to initialize on window object"));
+        return;
+      }
+      
+      // Load specific font for Arabic if needed
+      try {
+        const amiriFontStyle = document.createElement('style');
+        amiriFontStyle.textContent = `
+          @font-face {
+            font-family: 'Amiri';
+            src: url('https://fonts.googleapis.com/css2?family=Amiri&display=swap');
+            font-weight: normal;
+            font-style: normal;
+          }
+        `;
+        document.head.appendChild(amiriFontStyle);
+        
+        resolve();
+      } catch (err) {
+        console.warn("Error loading Arabic font:", err);
+        // Continue anyway with system fonts
+        resolve();
+      }
+    };
+    
+    jsPdfScript.onerror = () => reject(new Error("Failed to load jsPDF library"));
+    document.head.appendChild(jsPdfScript);
   });
 }
 
