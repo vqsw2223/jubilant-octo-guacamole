@@ -40,6 +40,9 @@
   --sidebar-accent-foreground: 24 9.8% 10%;
   --sidebar-border: 20 5.9% 90%;
   --sidebar-ring: 20 14.3% 4.1%;
+  
+  /* Add Saudi font as primary font */
+  font-family: 'HacenSaudiArabia', 'Amiri', serif;
 }
 
 .dark {
@@ -72,7 +75,7 @@
 
   body {
     @apply antialiased bg-background text-foreground;
-    font-family: 'Amiri', serif;
+    font-family: 'HacenSaudiArabia', 'Amiri', serif;
   }
 }
 
