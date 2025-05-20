@@ -161,7 +161,7 @@ export default function ReportsPage() {
                       <SelectValue placeholder="اختر الصف" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">جميع الصفوف</SelectItem>
+                      <SelectItem value="all">جميع الصفوف</SelectItem>
                       <SelectItem value="1">الصف الأول</SelectItem>
                       <SelectItem value="2">الصف الثاني</SelectItem>
                       <SelectItem value="3">الصف الثالث</SelectItem>

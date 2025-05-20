@@ -64,7 +64,7 @@ export default function SchedulePage() {
                   <SelectValue placeholder="اختر الصف" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">اختر الصف</SelectItem>
+                  <SelectItem value="default">اختر الصف</SelectItem>
                   <SelectItem value="1">الصف الأول</SelectItem>
                   <SelectItem value="2">الصف الثاني</SelectItem>
                   <SelectItem value="3">الصف الثالث</SelectItem>
@@ -79,7 +79,7 @@ export default function SchedulePage() {
                   <SelectValue placeholder="اختر الشعبة" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">اختر الشعبة</SelectItem>
+                  <SelectItem value="default">اختر الشعبة</SelectItem>
                   <SelectItem value="أ">أ</SelectItem>
                   <SelectItem value="ب">ب</SelectItem>
                   <SelectItem value="ج">ج</SelectItem>

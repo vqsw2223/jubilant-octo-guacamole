@@ -170,7 +170,7 @@ export default function AttendancePage() {
                   <SelectValue placeholder="جميع الصفوف" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">جميع الصفوف</SelectItem>
+                  <SelectItem value="all">جميع الصفوف</SelectItem>
                   <SelectItem value="1">الصف الأول</SelectItem>
                   <SelectItem value="2">الصف الثاني</SelectItem>
                   <SelectItem value="3">الصف الثالث</SelectItem>
@@ -185,7 +185,7 @@ export default function AttendancePage() {
                   <SelectValue placeholder="جميع الشعب" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">جميع الشعب</SelectItem>
+                  <SelectItem value="all">جميع الشعب</SelectItem>
                   <SelectItem value="أ">أ</SelectItem>
                   <SelectItem value="ب">ب</SelectItem>
                   <SelectItem value="ج">ج</SelectItem>
