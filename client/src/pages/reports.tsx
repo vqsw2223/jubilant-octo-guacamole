@@ -12,7 +12,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { FileText, File, ChartPie, AlertTriangle, UserCheck, Download } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
-import { generateAttendancePDF, ensurePdfLibraryLoaded } from "@/lib/utils/pdf-generator";
+import { generateAttendanceReportPDF } from "@/lib/utils/pdf-generator";
 import { AttendanceReport } from "@shared/schema";
 
 type ReportType = "attendance" | "behavior" | "statistics";
@@ -33,8 +33,7 @@ export default function ReportsPage() {
       const data = await response.json() as AttendanceReport;
       
       try {
-        await ensurePdfLibraryLoaded();
-        await generateAttendancePDF(data);
+        await generateAttendanceReportPDF(data);
         
         toast({
           title: "تم إنشاء التقرير",

@@ -1,129 +1,92 @@
 import { AttendanceReport } from "@shared/schema";
 
 /**
- * Generate PDF for attendance report
+ * توليد تقرير الحضور كملف PDF
  */
-export async function generateAttendancePDF(data: AttendanceReport): Promise<void> {
+export async function generateAttendanceReportPDF(report: AttendanceReport): Promise<void> {
   try {
-    // Make sure jsPDF is loaded
-    await ensurePdfLibraryLoaded();
-    
-    if (!window.jspdf) {
-      console.error("jsPDF library not loaded");
+    // التأكد من تحميل jsPDF
+    if (typeof window.jspdf === "undefined") {
+      console.error("jsPDF لم يتم تحميل مكتبة");
       return;
     }
     
     const { jsPDF } = window.jspdf;
     
-    // Create document with default settings
+    // إنشاء مستند بالإعدادات الافتراضية
     const doc = new jsPDF();
     
-    // Set Right-to-Left mode for Arabic text
+    // تعيين وضع من اليمين إلى اليسار للنص العربي
     doc.setR2L(true);
     
-    // First try to use our Saudi Arabia font, fallback to standard fonts
+    // إعداد الخط العربي
     try {
-      // Using standard font for better compatibility
+      // استخدام الخط القياسي للتوافق
       doc.setFont("Helvetica", "normal");
     } catch (err) {
-      console.warn("Error setting font:", err);
-      // Fallback to default
+      console.warn("خطأ في تعيين الخط:", err);
+      // العودة إلى الخط الافتراضي
       doc.setFont("Helvetica", "normal");
     }
     
-    // Add title
+    // إضافة عنوان
     doc.setFontSize(18);
     doc.text("تقرير الغياب - مدرسة جابر بن حيان", 105, 20, { align: "center" });
     
-    // Add content - using separate lines to reduce potential issues
+    // إضافة شعار المدرسة (اختياري)
+    try {
+      const schoolLogo = new Image();
+      schoolLogo.src = "/images/school-logo-new.png";
+      doc.addImage(schoolLogo, "PNG", 10, 10, 20, 20);
+    } catch (err) {
+      console.warn("خطأ في إضافة الشعار:", err);
+    }
+    
+    // إضافة معلومات التقرير
+    doc.setFontSize(14);
+    doc.text(`الصف: ${report.className || "جميع الصفوف"}`, 190, 40, { align: "right" });
+    doc.text(`الشعبة: ${report.section || "جميع الشعب"}`, 190, 50, { align: "right" });
+    doc.text(`التاريخ: ${report.date}`, 190, 60, { align: "right" });
+    
+    // إضافة ملخص البيانات
+    doc.setFontSize(12);
+    doc.text(`عدد الطلاب: ${report.totalStudents}`, 190, 80, { align: "right" });
+    doc.text(`الحضور: ${report.presentCount}`, 190, 90, { align: "right" });
+    doc.text(`الغياب: ${report.absentCount}`, 190, 100, { align: "right" });
+    doc.text(`المتأخرون: ${report.lateCount}`, 190, 110, { align: "right" });
+    
+    // إضافة نسبة الحضور
+    const attendanceRate = Math.round((report.presentCount / report.totalStudents) * 100);
+    doc.text(`نسبة الحضور: ${attendanceRate}%`, 190, 120, { align: "right" });
+    
+    // إضافة جدول (مبسط)
+    const startY = 140;
+    const cellHeight = 10;
+    const colWidths = [25, 40, 70];
+    const headers = ["الحالة", "الصف / الشعبة", "اسم الطالب"];
+    
+    // رسم رأس الجدول
+    doc.setFillColor(220, 220, 220);
+    doc.rect(40, startY, 120, cellHeight, "F");
     doc.setFontSize(12);
     
-    // Draw report data - using position from right for proper RTL alignment
-    doc.text("عدد الطلاب:", 170, 40, { align: "right" });
-    doc.text(data.totalStudents.toString(), 140, 40, { align: "right" });
+    let currentX = 160;
+    headers.forEach((header, index) => {
+      doc.text(header, currentX, startY + 7);
+      currentX -= colWidths[index];
+    });
     
-    doc.text("عدد الطلاب الحاضرين:", 170, 50, { align: "right" });
-    doc.text(data.presentCount.toString(), 140, 50, { align: "right" });
+    // حفظ الملف
+    doc.save(`تقرير-الغياب-${report.date.replace(/\//g, "-")}.pdf`);
     
-    doc.text("عدد المتغيبين:", 170, 60, { align: "right" });
-    doc.text(data.absentCount.toString(), 140, 60, { align: "right" });
-    
-    doc.text("عدد المتأخرين:", 170, 70, { align: "right" });
-    doc.text(data.lateCount.toString(), 140, 70, { align: "right" });
-    
-    // Add date
-    const today = new Date();
-    doc.text("تاريخ التقرير:", 170, 90, { align: "right" });
-    doc.text(today.toLocaleDateString("ar-SA"), 140, 90, { align: "right" });
-    
-    // Add footer
-    doc.setFontSize(10);
-    doc.text("© 2025 سامي بن عازم الرويلي – جميع الحقوق محفوظة", 105, 270, { align: "center" });
-    
-    // Save PDF
-    doc.save("تقرير_الغياب.pdf");
   } catch (error) {
-    console.error("Error generating PDF:", error);
+    console.error("خطأ في إنشاء ملف PDF:", error);
   }
 }
 
-/**
- * Load jsPDF library dynamically if not already loaded
- */
-export function ensurePdfLibraryLoaded(): Promise<void> {
-  if (window.jspdf) {
-    return Promise.resolve();
-  }
-  
-  return new Promise((resolve, reject) => {
-    // Load core jsPDF
-    const jsPdfScript = document.createElement('script');
-    jsPdfScript.src = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
-    
-    jsPdfScript.onload = () => {
-      // After jsPDF loads, load Arabic fonts plugin if needed
-      if (!window.jspdf) {
-        reject(new Error("jsPDF failed to initialize on window object"));
-        return;
-      }
-      
-      // Load specific font for Arabic if needed
-      try {
-        const amiriFontStyle = document.createElement('style');
-        amiriFontStyle.textContent = `
-          @font-face {
-            font-family: 'Amiri';
-            src: url('https://fonts.googleapis.com/css2?family=Amiri&display=swap');
-            font-weight: normal;
-            font-style: normal;
-          }
-        `;
-        document.head.appendChild(amiriFontStyle);
-        
-        resolve();
-      } catch (err) {
-        console.warn("Error loading Arabic font:", err);
-        // Continue anyway with system fonts
-        resolve();
-      }
-    };
-    
-    jsPdfScript.onerror = () => reject(new Error("Failed to load jsPDF library"));
-    document.head.appendChild(jsPdfScript);
-  });
-}
-
-// Add jsPDF to window type
+// إضافة التعريف لكائن window للتمكن من استخدام jsPDF
 declare global {
   interface Window {
-    jspdf: {
-      jsPDF: new () => {
-        setR2L: (rtl: boolean) => void;
-        setFont: (fontName: string, fontStyle?: string) => void;
-        setFontSize: (size: number) => void;
-        text: (text: string, x: number, y: number, options?: any) => void;
-        save: (filename: string) => void;
-      };
-    };
+    jspdf: any;
   }
 }

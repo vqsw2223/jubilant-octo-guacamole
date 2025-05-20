@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useQuery } from "@tanstack/react-query";
 import { Calendar, Printer } from "lucide-react";
-import { generateAttendancePDF, ensurePdfLibraryLoaded } from "@/lib/utils/pdf-generator";
+import { generateAttendanceReportPDF } from "@/lib/utils/pdf-generator";
 import { useToast } from "@/hooks/use-toast";
 import { ClassSchedule } from "@shared/schema";
 
