@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>نظام إدارة مدرسة جابر بن حيان</title>
+
+  <!-- خط رسمي عربي -->
+  <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
+
+  <!-- jsPDF للطباعة PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Amiri', serif;
+      background-color: #f0f4f8;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      direction: rtl;
+    }
+    header {
+      background-color: #004080;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    nav {
+      background-color: #e0e0e0;
+      padding: 0.5rem;
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+    }
+    nav a {
+      text-decoration: none;
+      color: #004080;
+      font-weight: bold;
+    }
+    main {
+      padding: 1rem;
+    }
+    section {
+      margin-bottom: 2rem;
+      padding: 1rem;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    footer {
+      background-color: #004080;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+    }
+    .button {
+      padding: 0.5rem 1rem;
+      background-color: #004080;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .button:hover {
+      background-color: #0066cc;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>نظام إدارة مدرسة جابر بن حيان</h1>
+    <p>© 2025 سامي بن عازم الرويلي – جميع الحقوق محفوظة.</p>
+  </header>
+
+  <nav>
+    <a href="#dashboard">لوحة التحكم</a>
+    <a href="#attendance">الحضور</a>
+    <a href="#reports">التقارير</a>
+    <a href="#behavior">المخالفات</a>
+    <a href="#announcements">الإعلانات</a>
+    <a href="#schedule">جدول الحصص</a>
+  </nav>
+
+  <main>
+    <section id="dashboard">
+      <h2>لوحة التحكم</h2>
+      <p>عدد الطلاب الحاضرين اليوم: <strong>120</strong></p>
+      <p>عدد المتغيبين: <strong>5</strong></p>
+      <p>عدد المتأخرين: <strong>3</strong></p>
+    </section>
+
+    <section id="attendance">
+      <h2>نظام الحضور</h2>
+      <label>اسم الطالب: <input type="text" placeholder="أدخل الاسم"></label>
+      <select>
+        <option>حاضر</option>
+        <option>غائب</option>
+        <option>متأخر</option>
+      </select>
+      <button class="button">تسجيل الحضور</button>
+    </section>
+
+    <section id="reports">
+      <h2>التقارير</h2>
+      <button class="button" onclick="generatePDF()">طباعة تقرير PDF</button>
+    </section>
+
+    <section id="behavior">
+      <h2>المخالفات السلوكية</h2>
+      <label>اسم الطالب: <input type="text"></label>
+      <input type="text" placeholder="نوع المخالفة">
+      <button class="button">تسجيل المخالفة</button>
+    </section>
+
+    <section id="announcements">
+      <h2>الإعلانات</h2>
+      <textarea rows="3" cols="30" placeholder="اكتب إعلانًا..."></textarea>
+      <button class="button">نشر الإعلان</button>
+    </section>
+
+    <section id="schedule">
+      <h2>جدول الحصص</h2>
+      <p>عرض جدول الحصص حسب اليوم أو الصف.</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>تطبيق تجريبي. الحساب: <strong>Usar: sami</strong> | <strong>Pass: 12345</strong></p>
+  </footer>
+
+  <script>
+    function generatePDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      doc.setFont("Amiri");
+      doc.setFontSize(14);
+      doc.text("تقرير الغياب – مدرسة جابر بن حيان", 20, 20);
+      doc.text("عدد الطلاب الحاضرين: 120", 20, 40);
+      doc.text("عدد المتغيبين: 5", 20, 50);
+      doc.text("عدد المتأخرين: 3", 20, 60);
+      doc.text("تاريخ: " + new Date().toLocaleDateString("ar-EG"), 20, 80);
+
+      doc.save("تقرير_الغياب.pdf");
+    }
+  </script>
+
+</body>
+</html>
