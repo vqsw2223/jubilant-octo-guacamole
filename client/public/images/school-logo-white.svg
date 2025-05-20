@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="500" height="500" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+  <!-- Shield background -->
+  <path d="M250 30 C150 30 80 80 80 200 C80 350 180 470 250 470 C320 470 420 350 420 200 C420 80 350 30 250 30 Z" fill="white" stroke="#1a5fb4" stroke-width="15"/>
+  
+  <!-- Blue bottom section -->
+  <path d="M80 300 C100 400 180 470 250 470 C320 470 400 400 420 300 L350 320 L250 370 L150 320 Z" fill="#1a5fb4"/>
+  
+  <!-- JHS text -->
+  <text x="250" y="340" font-family="Arial" font-size="60" font-weight="bold" text-anchor="middle" fill="white">JHS</text>
+  
+  <!-- Open book -->
+  <path d="M170 200 L250 230 L330 200 C330 200 330 280 330 280 L250 310 L170 280 Z" fill="#1a5fb4"/>
+  <path d="M250 230 L250 310" stroke="white" stroke-width="5"/>
+  <path d="M210 210 L210 290" stroke="white" stroke-width="2"/>
+  <path d="M190 205 L190 285" stroke="white" stroke-width="2"/>
+  <path d="M290 210 L290 290" stroke="white" stroke-width="2"/>
+  <path d="M310 205 L310 285" stroke="white" stroke-width="2"/>
+  
+  <!-- Torch/Flame -->
+  <path d="M250 150 L240 180 L250 170 L260 180 L250 150 Z" fill="#1a5fb4"/>
+  <rect x="245" y="170" width="10" height="60" fill="#1a5fb4"/>
+  
+  <!-- Arabic text (جابر بن حيان الثانوية) curve path for top text -->
+  <path id="topCurve" d="M150 100 Q250 60 350 100" fill="none"/>
+  <text font-family="Cairo" font-size="30" fill="#1a5fb4">
+    <textPath href="#topCurve" text-anchor="middle" startOffset="50%">جابر بن حيان الثانوية</textPath>
+  </text>
+</svg>

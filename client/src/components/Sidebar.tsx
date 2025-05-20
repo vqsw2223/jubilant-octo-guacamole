@@ -92,7 +92,7 @@ export default function Sidebar() {
         {/* Sidebar header */}
         <div className="p-4 border-b border-gray-200 flex items-center justify-between">
           <div className="flex items-center">
-            <img src="/images/school-logo.jpg" alt="شعار المدرسة" className="h-12 w-12 ml-2" />
+            <img src="/images/school-logo-white.svg" alt="شعار المدرسة" className="h-12 w-12 ml-2" />
             <h1 className="text-lg font-bold text-primary">مدرسة جابر بن حيان</h1>
           </div>
           <Button 
